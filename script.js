@@ -13,7 +13,7 @@ const videoTexture = new THREE.VideoTexture(video);
 scene.background = videoTexture;
 
 const loader = new THREE.GLTFLoader();
-loader.load('model.glb', (gltf) => {
+loader.load('hullam_kicsi.glb', (gltf) => {
   const model = gltf.scene;
   model.scale.set(1, 1, 1);
   model.position.set(0, 0, -2);
@@ -30,3 +30,4 @@ function animate() {
   renderer.render(scene, camera);
 }
 animate();
+
