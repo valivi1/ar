@@ -5,8 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kamera + 3D modell</title>
     <style>
-      body { margin: 0; overflow: hidden; }
-      video { display: none; }
+      body {
+        margin: 0;
+        overflow: hidden;
+      }
+
+      /* A videó technikailag fut, de nem látszik */
+      video {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        object-fit: cover;
+        opacity: 0;
+        z-index: -1;
+      }
     </style>
   </head>
   <body>
