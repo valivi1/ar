@@ -10,7 +10,6 @@
         overflow: hidden;
       }
 
-      /* A videó technikailag fut, de nem látszik */
       video {
         position: absolute;
         top: 0;
@@ -27,14 +26,7 @@
     <video id="video" autoplay playsinline muted></video>
     <canvas id="canvas"></canvas>
 
-    <!-- three.js -->
-    <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
-    <!-- GLTFLoader -->
-    <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/js/loaders/GLTFLoader.js"></script>
-    <!-- OrbitControls -->
-    <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/js/controls/OrbitControls.js"></script>
-
-    <!-- saját script -->
-    <script src="script.js"></script>
+    <!-- Itt már csak a saját modul scriptet hívjuk be -->
+    <script type="module" src="script.js"></script>
   </body>
 </html>
