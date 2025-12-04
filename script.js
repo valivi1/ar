@@ -1,16 +1,5 @@
 // --- Kamera inicializálás ---
 const video = document.getElementById('video');
-
-// Egyszerűsített kameraindítás (bármelyik elérhető kamera)
-navigator.mediaDevices.getUserMedia({ video: true })
-  .then(stream => {
-    video.srcObject = stream;
-  })
-  .catch(err => {
-    console.error('Kamera hiba:', err);
-  });
-
-// --- THREE.JS alapbeállítás ---
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
   70,
@@ -26,25 +15,38 @@ const renderer = new THREE.WebGLRenderer({
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setClearColor(0x000000, 0);
 
-// Kamera háttér beállítása
-const videoTexture = new THREE.VideoTexture(video);
-scene.background = videoTexture;
+// --- Kamera stream elindítása ---
+navigator.mediaDevices.getUserMedia({ video: true })
+  .then(stream => {
+    video.srcObject = stream;
+    return video.play(); // biztos, hogy elindul
+  })
+  .then(() => {
+    // Csak akkor állítjuk be a háttér textúrát, amikor a videó ténylegesen játszik
+    const videoTexture = new THREE.VideoTexture(video);
+    scene.background = videoTexture;
 
-// --- 3D modell betöltése (ha elérhető) ---
-const loader = new THREE.GLTFLoader();
-loader.load(
-  'hullam_kicsi.glb',
-  (gltf) => {
-    const model = gltf.scene;
-    model.scale.set(1, 1, 1);
-    model.position.set(0, 0, -2);
-    scene.add(model);
-  },
-  undefined,
-  (error) => {
-    console.error('Modell betöltési hiba:', error);
-  }
-);
+    // 3D modell betöltése
+    const loader = new THREE.GLTFLoader();
+    loader.load(
+      'hullam_kicsi.glb', // vagy hullam_comp.glb, ha így nevezted
+      (gltf) => {
+        const model = gltf.scene;
+        model.scale.set(1, 1, 1);
+        model.position.set(0, 0, -2);
+        scene.add(model);
+      },
+      undefined,
+      (error) => {
+        console.error('Modell betöltési hiba:', error);
+      }
+    );
+
+    animate();
+  })
+  .catch(err => {
+    console.error('Kamera hiba:', err);
+  });
 
 // --- Kameravezérlés ---
 const controls = new THREE.OrbitControls(camera, renderer.domElement);
@@ -57,7 +59,6 @@ function animate() {
   controls.update();
   renderer.render(scene, camera);
 }
-animate();
 
 // --- Képernyőméret változás kezelése ---
 window.addEventListener('resize', () => {
