@@ -5,24 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>3D modell teszt</title>
     <style>
-      body { margin: 0; overflow: hidden; }
+      body { margin: 0; overflow: hidden; background: #222; }
     </style>
   </head>
   <body>
     <canvas id="canvas"></canvas>
 
+    <!-- FONTOS: csak ez az egy script, és type="module" -->
     <script type="module">
       import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
       import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/GLTFLoader.js';
       import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js';
 
-      const canvas = document.getElementById('canvas');
       const scene = new THREE.Scene();
-
       const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 100);
       camera.position.z = 2;
 
-      const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+      const renderer = new THREE.WebGLRenderer({ antialias: true });
       renderer.setSize(window.innerWidth, window.innerHeight);
       renderer.setPixelRatio(window.devicePixelRatio);
       document.body.appendChild(renderer.domElement);
@@ -35,22 +34,21 @@
       const ambient = new THREE.AmbientLight(0xffffff, 0.5);
       scene.add(ambient);
 
-      // Modell betöltése
+      // 3D modell betöltése
       const loader = new GLTFLoader();
       loader.load(
-        'hullam_kicsi.glb',  // a modell neve
-        gltf => {
+        'hullam_kicsi.glb',
+        (gltf) => {
           const model = gltf.scene;
           model.scale.set(1, 1, 1);
           model.position.set(0, 0, 0);
           scene.add(model);
         },
-        xhr => console.log((xhr.loaded / xhr.total * 100) + '% loaded'),
-        error => console.error('Modell betöltési hiba:', error)
+        undefined,
+        (error) => console.error('Modell betöltési hiba:', error)
       );
 
       const controls = new OrbitControls(camera, renderer.domElement);
-      controls.update();
 
       function animate() {
         requestAnimationFrame(animate);
