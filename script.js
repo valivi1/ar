@@ -1,3 +1,8 @@
+// Modul importok — figyelj, ez kötelező az új verziókhoz
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/GLTFLoader.js';
+import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js';
+
 // --- Kamera inicializálás ---
 const video = document.getElementById('video');
 const canvas = document.getElementById('canvas');
@@ -19,7 +24,6 @@ navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
     return video.play();
   })
   .then(() => {
-    // Csak ekkor, amikor a videó ténylegesen játszik
     const videoTexture = new THREE.VideoTexture(video);
     videoTexture.minFilter = THREE.LinearFilter;
     videoTexture.magFilter = THREE.LinearFilter;
@@ -28,7 +32,7 @@ navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
     scene.background = videoTexture;
 
     // 3D modell betöltése
-    const loader = new THREE.GLTFLoader();
+    const loader = new GLTFLoader();
     loader.load(
       'hullam_kicsi.glb',
       gltf => {
@@ -47,8 +51,8 @@ navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
     console.error('Kamera hiba:', err);
   });
 
-// OrbitControls (opcionális)
-const controls = new THREE.OrbitControls(camera, renderer.domElement);
+// OrbitControls
+const controls = new OrbitControls(camera, renderer.domElement);
 controls.target.set(0, 0, -2);
 controls.update();
 
